@@ -1,17 +1,17 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<HelloWorld
+:top=ar.top
+:left=ar.left
+:bottom=ar.top
+:right=ar.left
+/>
 </template>
 
-<script>
+<script setup>
+import { reactive } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
+const ar = reactive({ id: 0, top: Math.random() * window.innerHeight, left: Math.random() * window.innerWidth })
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
 </script>
 
 <style lang="scss">
