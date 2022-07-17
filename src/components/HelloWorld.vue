@@ -10,8 +10,8 @@
 </div>
 
 <div class="label" v-bind:style="{
-  right: props.labelX - 25 + 'px',
-  bottom: props.labelY - 25 + 'px'
+  left: props.labelX - 100 + 'px',
+  top: props.labelY - 100 + 'px'
 }" @mouseover="hover = true" @mouseleave="hover = false">
 <h1>{{ props.label }}</h1>
 </div>

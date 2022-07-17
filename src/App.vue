@@ -2,10 +2,10 @@
 <div id="p5Canvas"></div>
 <HelloWorld v-for="arr in ar"
 :key=arr.id
-:image-y=arr.loc.y
-:image-x=arr.loc.x
-:label-y=arr.loc.y
-:label-x=arr.loc.x
+:image-y=arr.loc.i.y
+:image-x=arr.loc.i.x
+:label-y=arr.loc.l.y
+:label-x=arr.loc.l.x
 :image1=arr.image1
 :image2=arr.image2
 :label=arr.label
@@ -23,21 +23,22 @@ import P5 from 'p5'
 import { ref, reactive, onBeforeMount, onMounted } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 const locations = []
+const reverseLocations = []
 const width = window.innerWidth
 const height = window.innerHeight
-
+const boxes = 100
 function findAlocation () {
   const r = parseInt(Math.random() * locations.length)
-  const value = locations[r]
+  const value = { i: locations[r], l: reverseLocations[r] }
   locations.splice(r, 1)
-
+  reverseLocations.splice(r, 1)
   return value
 }
 
 function locationConstructor () {
   const w = width
   const h = height
-  const sqrt = (w * h) / 500
+  const sqrt = (w * h) / boxes
   const diff = Math.sqrt(sqrt)
   for (let i = 0; i < w; i += diff) {
     for (let y = 0; y < h; y += diff) {
@@ -46,7 +47,21 @@ function locationConstructor () {
   }
 }
 
+function reverselocationConstructor () {
+  const w = width
+  const h = height
+  const sqrt = (w * h) / boxes
+  const diff = Math.sqrt(sqrt)
+  for (let i = w; i > 0; i -= diff) {
+    for (let y = h; y > 0; y -= diff) {
+      reverseLocations.push({ x: i, y: y })
+    }
+  }
+}
+reverselocationConstructor()
 locationConstructor()
+
+console.log(reverseLocations, locations)
 const ar = reactive(
   [{ id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
     { id: 1, label: 'Aaryan', loc: findAlocation(), image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png') },
@@ -59,10 +74,10 @@ const sketch = (s) => {
     s.createCanvas(window.innerWidth, window.innerHeight)
   }
   s.draw = () => {
-    const w = width
-    const h = height
-    const sqrt = (w * h) / 400
-    const diff = Math.sqrt(sqrt)
+    // const w = width
+    // const h = height
+    // const sqrt = (w * h) / 400
+    // const diff = Math.sqrt(sqrt)
     s.background(200)
     s.strokeWeight(2)
     s.line(s.mouseX, s.mouseY, width - s.mouseX, height - s.mouseY)
@@ -70,14 +85,14 @@ const sketch = (s) => {
     s.strokeWeight(0)
     s.circle(s.mouseX, s.mouseY, 50)
     s.circle(width - s.mouseX, height - s.mouseY, 50)
-    for (let i = 0; i < w; i += diff) {
-      for (let y = 0; y < h; y += diff) {
-        s.strokeWeight(0.5)
-        s.stroke(100)
-        s.line(i, 0, i, h)
-        s.line(0, y, w, y)
-      }
-    }
+    // for (let i = 0; i < w; i += diff) {
+    //   for (let y = 0; y < h; y += diff) {
+    //     s.strokeWeight(0.5)
+    //     s.stroke(100)
+    //     s.line(i, 0, i, h)
+    //     s.line(0, y, w, y)
+    //   }
+    // }
   }
 }
 
