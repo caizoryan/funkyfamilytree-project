@@ -26,7 +26,10 @@ const locations = []
 const reverseLocations = []
 const width = window.innerWidth
 const height = window.innerHeight
-const boxes = 100
+const boxes = 500
+const border = 100
+// const boxBorder = 10
+// const boxSize = 100
 function findAlocation () {
   const r = parseInt(Math.random() * locations.length)
   const value = { i: locations[r], l: reverseLocations[r] }
@@ -61,6 +64,35 @@ function reverselocationConstructor () {
 reverselocationConstructor()
 locationConstructor()
 
+function cleanUp () {
+  const indexToRemove = []
+  for (let i = 0; i < locations.length; i++) {
+    const x = locations[i].x
+    const y = locations[i].y
+    if (x < border) {
+      indexToRemove.push(i)
+    }
+    if (y < border) {
+      indexToRemove.push(i)
+    }
+    if (x > (width - border)) {
+      indexToRemove.push(i)
+    }
+    if (y > (height - border)) {
+      indexToRemove.push(i)
+    }
+  }
+  const indexFixer = (value, index, self) => {
+    return self.indexOf(value) === index
+  }
+  const unique = indexToRemove.filter(indexFixer)
+  for (let i = 0; i < unique.length; i++) {
+    locations.splice(unique[i] - i, 1)
+    reverseLocations.splice(unique[i] - i, 1)
+  }
+}
+
+cleanUp()
 console.log(reverseLocations, locations)
 const ar = reactive(
   [{ id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
