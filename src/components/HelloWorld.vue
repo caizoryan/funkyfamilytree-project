@@ -34,14 +34,15 @@ onMounted(() => {
 .image-box{
   width: 100px;
   height: 100px;
-  background-color: rgb(177, 177, 177);
+  background-color: rgba(177, 177, 177, 0);
+  border: 1px solid black;
   position: absolute;
   img{
     position: absolute;
-    top: 7.5%;
-    left: 7.5%;
-    width: 85%;
-    height: 85%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 }
 

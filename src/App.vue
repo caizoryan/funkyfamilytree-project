@@ -2,10 +2,10 @@
 <div id="p5Canvas"></div>
 <HelloWorld v-for="arr in ar"
 :key=arr.id
-:image-y=arr.top
-:image-x=arr.left
-:label-y=arr.top
-:label-x=arr.left
+:image-y=arr.loc.y
+:image-x=arr.loc.x
+:label-y=arr.loc.y
+:label-x=arr.loc.x
 :image1=arr.image1
 :image2=arr.image2
 :label=arr.label
@@ -22,10 +22,36 @@
 import P5 from 'p5'
 import { ref, reactive, onBeforeMount, onMounted } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
+const locations = []
+const width = window.innerWidth
+const height = window.innerHeight
 
+function findAlocation () {
+  const r = parseInt(Math.random() * locations.length)
+  const value = locations[r]
+  locations.splice(r, 1)
+
+  return value
+}
+
+function locationConstructor () {
+  const w = width
+  const h = height
+  const sqrt = (w * h) / 500
+  const diff = Math.sqrt(sqrt)
+  for (let i = 0; i < w; i += diff) {
+    for (let y = 0; y < h; y += diff) {
+      locations.push({ x: i, y: y })
+    }
+  }
+}
+
+locationConstructor()
 const ar = reactive(
-  [{ id: 0, label: 'Armaan', top: Math.random() * window.innerHeight, left: Math.random() * window.innerWidth, image1: require('@/assets/1/1.jpeg'), image2: require('@/assets/1/2.jpeg') },
-    { id: 1, label: 'Aaryan', top: 200, left: 900, image1: require('@/assets/2/1.jpeg'), image2: require('@/assets/2/2.jpeg') }
+  [{ id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
+    { id: 1, label: 'Aaryan', loc: findAlocation(), image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png') },
+    { id: 2, label: 'Papa', loc: findAlocation(), image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png') },
+    { id: 3, label: 'Muma', loc: findAlocation(), image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png') }
   ])
 
 const sketch = (s) => {
@@ -33,13 +59,25 @@ const sketch = (s) => {
     s.createCanvas(window.innerWidth, window.innerHeight)
   }
   s.draw = () => {
+    const w = width
+    const h = height
+    const sqrt = (w * h) / 400
+    const diff = Math.sqrt(sqrt)
     s.background(200)
-    s.strokeWeight(1)
-    s.line(s.mouseX, s.mouseY, window.innerWidth - s.mouseX, window.innerHeight - s.mouseY)
+    s.strokeWeight(2)
+    s.line(s.mouseX, s.mouseY, width - s.mouseX, height - s.mouseY)
     s.fill(200)
     s.strokeWeight(0)
     s.circle(s.mouseX, s.mouseY, 50)
-    s.circle(window.innerWidth - s.mouseX, window.innerHeight - s.mouseY, 50)
+    s.circle(width - s.mouseX, height - s.mouseY, 50)
+    for (let i = 0; i < w; i += diff) {
+      for (let y = 0; y < h; y += diff) {
+        s.strokeWeight(0.5)
+        s.stroke(100)
+        s.line(i, 0, i, h)
+        s.line(0, y, w, y)
+      }
+    }
   }
 }
 
@@ -56,8 +94,8 @@ onMounted(() => {
 const valuex = ref(0)
 const valuey = ref(0)
 function update (event) {
-  valuex.value = window.innerWidth - event.pageX
-  valuey.value = window.innerHeight - event.pageY
+  valuex.value = width - event.pageX
+  valuey.value = height - event.pageY
 }
 </script>
 
