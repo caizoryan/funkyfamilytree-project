@@ -26,7 +26,7 @@ const locations = []
 const reverseLocations = []
 const width = window.innerWidth
 const height = window.innerHeight
-const boxes = 500
+const boxes = 100
 const border = 100
 // const boxBorder = 10
 // const boxSize = 100
@@ -35,9 +35,52 @@ function findAlocation () {
   const value = { i: locations[r], l: reverseLocations[r] }
   locations.splice(r, 1)
   reverseLocations.splice(r, 1)
+  rangeCleanup(value.l.x, value.l.y)
+  rangeCleanup2(value.i.x, value.i.y)
   return value
 }
-
+function rangeCleanup (boxX, boxY) {
+  const indexToRemove = []
+  for (let i = 0; i < locations.length; i++) {
+    const x = locations[i].x
+    const y = locations[i].y
+    if (x > boxX - 200 && x < boxX) {
+      indexToRemove.push(i)
+    }
+    if (y > boxY - 200 && y < boxY) {
+      indexToRemove.push(i)
+    }
+  }
+  const indexFixer = (value, index, self) => {
+    return self.indexOf(value) === index
+  }
+  const unique = indexToRemove.filter(indexFixer)
+  for (let i = 0; i < unique.length; i++) {
+    locations.splice(unique[i] - i, 1)
+    reverseLocations.splice(unique[i] - i, 1)
+  }
+}
+function rangeCleanup2 (boxX, boxY) {
+  const indexToRemove = []
+  for (let i = 0; i < locations.length; i++) {
+    const x = locations[i].x
+    const y = locations[i].y
+    if (x > boxX - 100 && x < boxX) {
+      indexToRemove.push(i)
+    }
+    if (y > boxY - 100 && y < boxY) {
+      indexToRemove.push(i)
+    }
+  }
+  const indexFixer = (value, index, self) => {
+    return self.indexOf(value) === index
+  }
+  const unique = indexToRemove.filter(indexFixer)
+  for (let i = 0; i < unique.length; i++) {
+    locations.splice(unique[i] - i, 1)
+    reverseLocations.splice(unique[i] - i, 1)
+  }
+}
 function locationConstructor () {
   const w = width
   const h = height
@@ -93,7 +136,6 @@ function cleanUp () {
 }
 
 cleanUp()
-console.log(reverseLocations, locations)
 const ar = reactive(
   [{ id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
     { id: 1, label: 'Aaryan', loc: findAlocation(), image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png') },
@@ -144,6 +186,8 @@ function update (event) {
   valuex.value = width - event.pageX
   valuey.value = height - event.pageY
 }
+
+console.log(locations)
 </script>
 
 <style lang="scss">
