@@ -42,7 +42,7 @@ function locationConstructor () {
   const diff = Math.sqrt(sqrt)
   for (let i = 0; i < w; i += diff) {
     for (let y = 0; y < h; y += diff) {
-      locations.push({ x: i, y: y })
+      locations.push({ x: parseInt(i), y: parseInt(y) })
     }
   }
 }
@@ -54,7 +54,7 @@ function reverselocationConstructor () {
   const diff = Math.sqrt(sqrt)
   for (let i = w; i > 0; i -= diff) {
     for (let y = h; y > 0; y -= diff) {
-      reverseLocations.push({ x: i, y: y })
+      reverseLocations.push({ x: parseInt(i), y: parseInt(y) })
     }
   }
 }
