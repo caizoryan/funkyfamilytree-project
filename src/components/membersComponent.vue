@@ -2,7 +2,7 @@
 <div @click="releaseConnections" v-if="props.display" class="image-box" v-bind:style="{
   left: props.imageX + 'px',
   top: props.imageY + 'px'
-}" @mouseover="hover = true" @mouseleave="hover = false">
+}" @mouseover="enter" @mouseleave="leave">
 
 <img v-if="hover == false" :src=props.image1 alt="">
 <img v-if="hover" :src=props.image2 alt="">
@@ -12,7 +12,7 @@
 <div @click="releaseConnections" v-if="props.display" class="label" v-bind:style="{
   left: props.labelX + 'px',
   top: props.labelY + 'px'
-}" @mouseover="hover = true" @mouseleave="hover = false">
+}" @mouseover="enter" @mouseleave="leave">
 <h1>{{ props.label }}</h1>
 </div>
 </template>
@@ -31,6 +31,14 @@ onMounted(() => {
 })
 function releaseConnections () {
   release(id)
+}
+function enter () {
+  hover.value = true
+  ar[id].hover = true
+}
+function leave () {
+  hover.value = false
+  ar[id].hover = false
 }
 </script>
 
@@ -65,20 +73,5 @@ function releaseConnections () {
     color: black;
     font-size: 15px;
   }
-}
-
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
 }
 </style>

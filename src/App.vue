@@ -128,23 +128,24 @@ reverselocationConstructor()
 locationConstructor()
 removeBorderLocations()
 const ar = reactive(
-  [{ id: 0, label: 'Armaan', display: true, connections: [2, 3], image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png'), loc: findAlocation() },
-    { id: 1, label: 'Aaryan', display: true, connections: [2, 3], image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png'), loc: findAlocation() },
-    { id: 2, label: 'Papa', display: false, connections: [0, 1], image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png'), loc: findAlocation() },
-    { id: 3, label: 'Muma', display: false, connections: [0, 1, 5, 6], image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png'), loc: findAlocation() },
-    { id: 4, label: 'Appy Mamu', display: false, connections: [5, 6], image1: require('@/assets/5/1.png'), image2: require('@/assets/5/2.png'), loc: findAlocation() },
-    { id: 5, label: 'Baba', display: false, connections: [4, 5], image1: require('@/assets/6/1.png'), image2: require('@/assets/6/2.png'), loc: findAlocation() },
-    { id: 6, label: 'Nani', display: false, connections: [4, 5], image1: require('@/assets/7/1.png'), image2: require('@/assets/7/2.png'), loc: findAlocation() }
+  [{ id: 0, label: 'Armaan', display: true, connections: [2, 3], image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png'), loc: findAlocation(), hover: false },
+    { id: 1, label: 'Aaryan', display: true, connections: [2, 3], image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png'), loc: findAlocation(), hover: false },
+    { id: 2, label: 'Papa', display: false, connections: [0, 1], image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png'), loc: findAlocation(), hover: false },
+    { id: 3, label: 'Mumma', display: false, connections: [0, 1, 5, 6], image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png'), loc: findAlocation(), hover: false },
+    { id: 4, label: 'Appy Mamu', display: false, connections: [5, 6], image1: require('@/assets/5/1.png'), image2: require('@/assets/5/2.png'), loc: findAlocation(), hover: false },
+    { id: 5, label: 'Baba', display: false, connections: [4, 3, 7], image1: require('@/assets/6/1.png'), image2: require('@/assets/6/2.png'), loc: findAlocation(), hover: false },
+    { id: 6, label: 'Nani', display: false, connections: [4, 3, 7], image1: require('@/assets/7/1.png'), image2: require('@/assets/7/2.png'), loc: findAlocation(), hover: false },
+    { id: 7, label: 'Angai Masi', display: false, connections: [5, 6], image1: require('@/assets/8/1.png'), image2: require('@/assets/8/2.png'), loc: findAlocation(), hover: false }
   ])
 const sketch = (s) => {
   s.setup = () => {
     s.createCanvas(window.innerWidth, window.innerHeight)
   }
   s.draw = () => {
-    const w = width
-    const h = height
-    const sqrt = (w * h) / 400
-    const diff = Math.sqrt(sqrt)
+    // const w = width
+    // const h = height
+    // const sqrt = (w * h) / 400
+    // const diff = Math.sqrt(sqrt)
     s.background(200)
     s.strokeWeight(2)
     s.stroke(0)
@@ -153,18 +154,18 @@ const sketch = (s) => {
     s.strokeWeight(2)
     s.circle(s.mouseX, s.mouseY, 50)
     s.circle(width - s.mouseX, height - s.mouseY, 50)
-    for (let i = 0; i < w; i += diff) {
-      for (let y = 0; y < h; y += diff) {
-        s.strokeWeight(0.5)
-        s.stroke(100, 100, 100, 2)
-        s.line(i, 0, i, h)
-        s.line(0, y, w, y)
-      }
-    }
+    // for (let i = 0; i < w; i += diff) {
+    //   for (let y = 0; y < h; y += diff) {
+    //     s.strokeWeight(0.5)
+    //     s.stroke(100, 100, 100, 2)
+    //     s.line(i, 0, i, h)
+    //     s.line(0, y, w, y)
+    //   }
+    // }
     s.strokeWeight(1)
-    s.stroke(80, 80, 80, 20)
+    s.stroke(0)
     for (let i = 0; i < s.array.length; i++) {
-      if (s.array[i].display === true) {
+      if (s.array[i].hover === true) {
         for (let c = 0; c < s.array[i].connections.length; c++) {
           if (s.array[s.array[i].connections[c]].display === true) {
             s.line(s.array[i].loc.i.x + 50, s.array[i].loc.i.y + 50, s.array[s.array[i].connections[c]].loc.i.x + 50, s.array[s.array[i].connections[c]].loc.i.y + 50)
@@ -200,7 +201,6 @@ function update (event) {
 function releaseConnections (id) {
   for (let i = 0; i < ar[id].connections.length; i++) {
     ar[ar[id].connections[i]].display = true
-    console.log(ar[ar[id].connections[i]].display)
   }
 }
 provide('release', releaseConnections)
@@ -208,9 +208,7 @@ provide('ar', ar)
 </script>
 
 <style lang="scss">
-*{
-  cursor: none;
-}
+
 #p5Canvas{
   position: absolute;
   top: 0;
@@ -223,9 +221,6 @@ provide('ar', ar)
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 
 #cursor{
@@ -240,7 +235,6 @@ provide('ar', ar)
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0;
   }
 }
 </style>
