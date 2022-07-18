@@ -1,5 +1,12 @@
 <template>
 <div id="p5Canvas"></div>
+<debugBro v-for="rum in debug"
+:key=rum.id
+:x1=rum.im.x
+:x2=rum.la.x
+:y1=rum.im.y
+:y2=rum.la.y
+/>
 <HelloWorld v-for="arr in ar"
 :key=arr.id
 :image-y=arr.loc.i.y
@@ -22,64 +29,55 @@
 import P5 from 'p5'
 import { ref, reactive, onBeforeMount, onMounted } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
+import debugBro from './components/debugBro.vue'
 const locations = []
 const reverseLocations = []
+const assignedLocations = []
 const width = window.innerWidth
 const height = window.innerHeight
-const boxes = 100
+const boxes = 150
 const border = 100
 // const boxBorder = 10
 // const boxSize = 100
 function findAlocation () {
-  const r = parseInt(Math.random() * locations.length)
+  let r = 0
+  let ar = []
+  let collide = true
+  while (collide) {
+    ar = checkCollision()
+    collide = ar[0]
+    r = ar[1]
+  }
+  assignedLocations.push({ x: parseInt(locations[r].x), y: parseInt(locations[r].y) })
+  assignedLocations.push({ x: parseInt(reverseLocations[r].x), y: parseInt(reverseLocations[r].y) })
   const value = { i: locations[r], l: reverseLocations[r] }
   locations.splice(r, 1)
   reverseLocations.splice(r, 1)
-  rangeCleanup(value.l.x, value.l.y)
-  rangeCleanup2(value.i.x, value.i.y)
   return value
 }
-function rangeCleanup (boxX, boxY) {
-  const indexToRemove = []
-  for (let i = 0; i < locations.length; i++) {
-    const x = locations[i].x
-    const y = locations[i].y
-    if (x > boxX - 200 && x < boxX) {
-      indexToRemove.push(i)
+function checkCollision () {
+  const r = parseInt(Math.random() * locations.length)
+  let collision = false
+  for (let i = 0; i < assignedLocations.length; i++) {
+    // check if colliding
+    // check if locations is colliding with all
+    if (locations[r].x + 100 >= assignedLocations[i].x &&
+       locations[r].x <= assignedLocations[i].x + 100 &&
+       locations[r].y + 100 >= assignedLocations[i].y &&
+       locations[r].y <= assignedLocations[i].y + 100) {
+      collision = true
     }
-    if (y > boxY - 200 && y < boxY) {
-      indexToRemove.push(i)
+    if (reverseLocations[r].x + 100 >= assignedLocations[i].x &&
+       reverseLocations[r].x <= assignedLocations[i].x + 100 &&
+       reverseLocations[r].y + 100 >= assignedLocations[i].y &&
+       reverseLocations[r].y <= assignedLocations[i].y + 100) {
+      collision = true
     }
+    // check if reverseLocations is collidiing with all
+    // return true or false
+    // return the value
   }
-  const indexFixer = (value, index, self) => {
-    return self.indexOf(value) === index
-  }
-  const unique = indexToRemove.filter(indexFixer)
-  for (let i = 0; i < unique.length; i++) {
-    locations.splice(unique[i] - i, 1)
-    reverseLocations.splice(unique[i] - i, 1)
-  }
-}
-function rangeCleanup2 (boxX, boxY) {
-  const indexToRemove = []
-  for (let i = 0; i < locations.length; i++) {
-    const x = locations[i].x
-    const y = locations[i].y
-    if (x > boxX - 100 && x < boxX) {
-      indexToRemove.push(i)
-    }
-    if (y > boxY - 100 && y < boxY) {
-      indexToRemove.push(i)
-    }
-  }
-  const indexFixer = (value, index, self) => {
-    return self.indexOf(value) === index
-  }
-  const unique = indexToRemove.filter(indexFixer)
-  for (let i = 0; i < unique.length; i++) {
-    locations.splice(unique[i] - i, 1)
-    reverseLocations.splice(unique[i] - i, 1)
-  }
+  return [collision, r]
 }
 function locationConstructor () {
   const w = width
@@ -92,7 +90,6 @@ function locationConstructor () {
     }
   }
 }
-
 function reverselocationConstructor () {
   const w = width
   const h = height
@@ -100,13 +97,12 @@ function reverselocationConstructor () {
   const diff = Math.sqrt(sqrt)
   for (let i = w; i > 0; i -= diff) {
     for (let y = h; y > 0; y -= diff) {
-      reverseLocations.push({ x: parseInt(i), y: parseInt(y) })
+      reverseLocations.push({ x: parseInt(i) - 100, y: parseInt(y) - 100 })
     }
   }
 }
 reverselocationConstructor()
 locationConstructor()
-
 function cleanUp () {
   const indexToRemove = []
   for (let i = 0; i < locations.length; i++) {
@@ -134,10 +130,17 @@ function cleanUp () {
     reverseLocations.splice(unique[i] - i, 1)
   }
 }
-
 cleanUp()
 const ar = reactive(
   [{ id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
+    { id: 1, label: 'Aaryan', loc: findAlocation(), image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png') },
+    { id: 2, label: 'Papa', loc: findAlocation(), image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png') },
+    { id: 3, label: 'Muma', loc: findAlocation(), image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png') },
+    { id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
+    { id: 1, label: 'Aaryan', loc: findAlocation(), image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png') },
+    { id: 2, label: 'Papa', loc: findAlocation(), image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png') },
+    { id: 3, label: 'Muma', loc: findAlocation(), image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png') },
+    { id: 0, label: 'Armaan', loc: findAlocation(), image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png') },
     { id: 1, label: 'Aaryan', loc: findAlocation(), image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png') },
     { id: 2, label: 'Papa', loc: findAlocation(), image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png') },
     { id: 3, label: 'Muma', loc: findAlocation(), image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png') }
@@ -156,7 +159,7 @@ const sketch = (s) => {
     s.strokeWeight(2)
     s.line(s.mouseX, s.mouseY, width - s.mouseX, height - s.mouseY)
     s.fill(200)
-    s.strokeWeight(0)
+    s.strokeWeight(2)
     s.circle(s.mouseX, s.mouseY, 50)
     s.circle(width - s.mouseX, height - s.mouseY, 50)
     // for (let i = 0; i < w; i += diff) {
@@ -170,6 +173,7 @@ const sketch = (s) => {
   }
 }
 
+console.log(assignedLocations)
 let d
 
 onBeforeMount(() => {
@@ -187,7 +191,12 @@ function update (event) {
   valuey.value = height - event.pageY
 }
 
-console.log(locations)
+const debug = []
+
+for (let i = 0; i < locations.length; i++) {
+  debug.push({ id: i, im: locations[i], la: reverseLocations[i] })
+}
+console.log(debug)
 </script>
 
 <style lang="scss">

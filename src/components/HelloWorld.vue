@@ -10,8 +10,8 @@
 </div>
 
 <div class="label" v-bind:style="{
-  left: props.labelX - 100 + 'px',
-  top: props.labelY - 100 + 'px'
+  left: props.labelX + 'px',
+  top: props.labelY + 'px'
 }" @mouseover="hover = true" @mouseleave="hover = false">
 <h1>{{ props.label }}</h1>
 </div>
@@ -35,7 +35,7 @@ onMounted(() => {
   width: 100px;
   height: 100px;
   background-color: rgba(177, 177, 177, 0);
-  border: 1px solid black;
+  // border: 1px solid black;
   position: absolute;
   img{
     position: absolute;
