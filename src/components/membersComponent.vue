@@ -1,5 +1,5 @@
 <template>
-<div class="image-box" v-bind:style="{
+<div @click="releaseConnections" v-if="props.display" class="image-box" v-bind:style="{
   left: props.imageX + 'px',
   top: props.imageY + 'px'
 }" @mouseover="hover = true" @mouseleave="hover = false">
@@ -9,7 +9,7 @@
 
 </div>
 
-<div class="label" v-bind:style="{
+<div @click="releaseConnections" v-if="props.display" class="label" v-bind:style="{
   left: props.labelX + 'px',
   top: props.labelY + 'px'
 }" @mouseover="hover = true" @mouseleave="hover = false">
@@ -18,15 +18,20 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, ref } from 'vue'
+import { defineProps, onMounted, ref, inject } from 'vue'
 const hover = ref(false)
-const props = defineProps(['imageX', 'imageY', 'labelX', 'labelY', 'image1', 'image2', 'label', 'id'])
-
+const props = defineProps(['imageX', 'imageY', 'labelX', 'labelY', 'image1', 'image2', 'label', 'id', 'display'])
+const ar = inject('ar')
+const release = inject('release')
+const display = ref(false)
+let id
 onMounted(() => {
-  const id = props.id
-  console.log(id)
+  id = props.id
+  display.value = ar[id].display
 })
-
+function releaseConnections () {
+  release(id)
+}
 </script>
 
 <style scoped lang="scss">

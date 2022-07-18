@@ -24,7 +24,7 @@ const props = defineProps(['x1', 'y1', 'x2', 'y2'])
     position: absolute;
     width: 100px;
     height: 100px;
-    // border: 2px white solid;
+    border: 2px white solid;
 }
 
 .debugOpp{
@@ -38,6 +38,6 @@ const props = defineProps(['x1', 'y1', 'x2', 'y2'])
     position: absolute;
     width: 100px;
     height: 100px;
-    //border: 2px rgb(172, 45, 62) solid;
+    border: 2px rgb(172, 45, 62) solid;
 }
 </style>
