@@ -1,17 +1,25 @@
 <template>
-<div @click="releaseConnections" v-if="props.display" class="image-box" v-bind:style="{
+<div @click="releaseConnections" v-if="props.display" class="image-box" :style="{
   left: props.imageX + 'px',
-  top: props.imageY + 'px'
+  top: props.imageY + 'px',
+  height: boxSize + 'px',
+  width: boxSize + 'px'
 }" @mouseover="enter" @mouseleave="leave">
 
-<img v-if="hover == false" :src=props.image1 alt="">
-<img v-if="hover" :src=props.image2 alt="">
+<img v-if="hover == false" :src=props.image1 :style="{
+  width: 100 + '%',
+  height: 100 + '%'}">
+<img v-if="hover" :src=props.image2 :style="{
+  width: 120 + '%',
+  height: 120 + '%'}" >
 
 </div>
 
 <div @click="releaseConnections" v-if="props.display" class="label" v-bind:style="{
   left: props.labelX + 'px',
-  top: props.labelY + 'px'
+  top: props.labelY + 'px',
+  height: boxSize + 'px',
+  width: boxSize + 'px'
 }" @mouseover="enter" @mouseleave="leave">
 <h1>{{ props.label }}</h1>
 </div>
@@ -24,6 +32,7 @@ const props = defineProps(['imageX', 'imageY', 'labelX', 'labelY', 'image1', 'im
 const ar = inject('ar')
 const release = inject('release')
 const display = ref(false)
+const boxSize = inject('boxSize')
 let id
 onMounted(() => {
   id = props.id
@@ -45,8 +54,6 @@ function leave () {
 <style scoped lang="scss">
 
 .image-box{
-  width: 100px;
-  height: 100px;
   background-color: rgba(177, 177, 177, 0);
   // border: 1px solid black;
   position: absolute;
@@ -54,14 +61,10 @@ function leave () {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
   }
 }
 
 .label{
-  width: 100px;
-  height: 100px;
   position: absolute;
   background-color: rgb(200, 200, 200);
   border: 2px solid black;

@@ -33,13 +33,13 @@ import MembersComponent from './components/membersComponent.vue'
 // import debugBro from './components/debugBro.vue'
 const locations = []
 const reverseLocations = []
-const assignedLocations = []
 const width = window.innerWidth
 const height = window.innerHeight
 const boxes = 1000
+const sqrt = (width * height) / (46 * 3)
+const boxSize = Math.sqrt(sqrt)
 const border = 100
-// const boxBorder = 10
-// const boxSize = 100
+const assignedLocations = [{ x: width / 2 - boxSize, y: height / 2 }, { x: width / 2 + boxSize, y: height / 2 }, { x: width / 2, y: height / 2 + boxSize }, { x: width / 2, y: height / 2 - boxSize }]
 function findAlocation () {
   let r = 0
   let ar = []
@@ -60,16 +60,16 @@ function checkCollision () {
   const r = parseInt(Math.random() * locations.length)
   let collision = false
   for (let i = 0; i < assignedLocations.length; i++) {
-    if (locations[r].x + 100 >= assignedLocations[i].x &&
-       locations[r].x <= assignedLocations[i].x + 100 &&
-       locations[r].y + 100 >= assignedLocations[i].y &&
-       locations[r].y <= assignedLocations[i].y + 100) {
+    if (locations[r].x + boxSize >= assignedLocations[i].x &&
+       locations[r].x <= assignedLocations[i].x + boxSize &&
+       locations[r].y + boxSize >= assignedLocations[i].y &&
+       locations[r].y <= assignedLocations[i].y + boxSize) {
       collision = true
     }
-    if (reverseLocations[r].x + 100 >= assignedLocations[i].x &&
-       reverseLocations[r].x <= assignedLocations[i].x + 100 &&
-       reverseLocations[r].y + 100 >= assignedLocations[i].y &&
-       reverseLocations[r].y <= assignedLocations[i].y + 100) {
+    if (reverseLocations[r].x + boxSize >= assignedLocations[i].x &&
+       reverseLocations[r].x <= assignedLocations[i].x + boxSize &&
+       reverseLocations[r].y + boxSize >= assignedLocations[i].y &&
+       reverseLocations[r].y <= assignedLocations[i].y + boxSize) {
       collision = true
     }
   }
@@ -93,7 +93,7 @@ function reverselocationConstructor () {
   const diff = Math.sqrt(sqrt)
   for (let i = w; i > 0; i -= diff) {
     for (let y = h; y > 0; y -= diff) {
-      reverseLocations.push({ x: parseInt(i) - 100, y: parseInt(y) - 100 })
+      reverseLocations.push({ x: parseInt(i) - boxSize, y: parseInt(y) - boxSize })
     }
   }
 }
@@ -168,7 +168,7 @@ const sketch = (s) => {
       if (s.array[i].hover === true) {
         for (let c = 0; c < s.array[i].connections.length; c++) {
           if (s.array[s.array[i].connections[c]].display === true) {
-            s.line(s.array[i].loc.i.x + 50, s.array[i].loc.i.y + 50, s.array[s.array[i].connections[c]].loc.i.x + 50, s.array[s.array[i].connections[c]].loc.i.y + 50)
+            s.line(s.array[i].loc.i.x + s.boxSize / 2, s.array[i].loc.i.y + s.boxSize / 2, s.array[s.array[i].connections[c]].loc.i.x + s.boxSize / 2, s.array[s.array[i].connections[c]].loc.i.y + s.boxSize / 2)
           }
         }
       }
@@ -184,6 +184,7 @@ onMounted(() => {
   window.addEventListener('mousemove', update)
   console.log(d)
   d.array = ar
+  d.boxSize = boxSize
 })
 const valuex = ref(0)
 const valuey = ref(0)
@@ -205,6 +206,7 @@ function releaseConnections (id) {
 }
 provide('release', releaseConnections)
 provide('ar', ar)
+provide('boxSize', boxSize)
 </script>
 
 <style lang="scss">
