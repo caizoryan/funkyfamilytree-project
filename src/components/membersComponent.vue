@@ -10,9 +10,8 @@
   width: 100 + '%',
   height: 100 + '%'}">
 <img v-if="hover" :src=props.image2 :style="{
-  width: 120 + '%',
-  height: 120 + '%'}" >
-
+  width: magnifyValue + '%',
+  height: magnifyValue + '%'}" >
 </div>
 
 <div @click="releaseConnections" v-if="props.display" class="label" v-bind:style="{
@@ -33,6 +32,7 @@ const ar = inject('ar')
 const release = inject('release')
 const display = ref(false)
 const boxSize = inject('boxSize')
+const magnifyValue = inject('magnifyValue')
 let id
 onMounted(() => {
   id = props.id

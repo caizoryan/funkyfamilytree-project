@@ -1,5 +1,7 @@
 <template>
 <div id="p5Canvas"></div>
+<NavBar></NavBar>
+
 <!-- <debugBro v-for="rum in debug"
 :key=rum.id
 :x1=rum.im.x
@@ -30,7 +32,9 @@
 import P5 from 'p5'
 import { ref, reactive, onBeforeMount, onMounted, provide } from 'vue'
 import MembersComponent from './components/membersComponent.vue'
+import NavBar from './components/navBar.vue'
 // import debugBro from './components/debugBro.vue'
+const magnifyValue = ref(150)
 const locations = []
 const reverseLocations = []
 const width = window.innerWidth
@@ -204,9 +208,14 @@ function releaseConnections (id) {
     ar[ar[id].connections[i]].display = true
   }
 }
+function magnify (val) {
+  magnifyValue.value = val
+}
 provide('release', releaseConnections)
 provide('ar', ar)
 provide('boxSize', boxSize)
+provide('magnifyValue', magnifyValue)
+provide('magnifyFunction', magnify)
 </script>
 
 <style lang="scss">
