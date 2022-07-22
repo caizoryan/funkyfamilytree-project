@@ -1,14 +1,6 @@
 <template>
 <div id="p5Canvas"></div>
 <NavBar></NavBar>
-
-<!-- <debugBro v-for="rum in debug"
-:key=rum.id
-:x1=rum.im.x
-:x2=rum.la.x
-:y1=rum.im.y
-:y2=rum.la.y
-/> -->
 <MembersComponent v-for="arr in ar"
 :key=arr.id
 :image-y=arr.loc.i.y
@@ -21,11 +13,14 @@
 :display=arr.display
 :id=arr.id
 />
-
 <div id="cursor" :style="{
   transform: 'translate(' + valuex + 'px,' + valuey + 'px)'
 }"><img src="@/assets/cursor.png" alt=""></div>
-
+<div  v-if="unlock" class="congratulations">
+  <h1>Congratulations!</h1>
+  <p>You unlocked the whole family!</p>
+  <button class="close" @click="unlock = false" >x</button>
+</div>
 </template>
 
 <script setup>
@@ -33,10 +28,10 @@ import P5 from 'p5'
 import { ref, reactive, onBeforeMount, onMounted, provide } from 'vue'
 import MembersComponent from './components/membersComponent.vue'
 import NavBar from './components/navBar.vue'
-// import debugBro from './components/debugBro.vue'
 const magnifyValue = ref(150)
 const locations = []
 const reverseLocations = []
+const unlock = ref(false)
 const width = window.innerWidth
 const height = window.innerHeight
 const boxes = 1000
@@ -134,22 +129,37 @@ removeBorderLocations()
 const ar = reactive(
   [{ id: 0, label: 'Armaan', display: true, connections: [2, 3], image1: require('@/assets/1/1.png'), image2: require('@/assets/1/2.png'), loc: findAlocation(), hover: false },
     { id: 1, label: 'Aaryan', display: true, connections: [2, 3], image1: require('@/assets/2/1.png'), image2: require('@/assets/2/2.png'), loc: findAlocation(), hover: false },
-    { id: 2, label: 'Papa', display: false, connections: [0, 1], image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png'), loc: findAlocation(), hover: false },
+    { id: 2, label: 'Papa', display: false, connections: [0, 1, 8, 9], image1: require('@/assets/3/1.png'), image2: require('@/assets/3/2.png'), loc: findAlocation(), hover: false },
     { id: 3, label: 'Mumma', display: false, connections: [0, 1, 5, 6], image1: require('@/assets/4/1.png'), image2: require('@/assets/4/2.png'), loc: findAlocation(), hover: false },
-    { id: 4, label: 'Appy Mamu', display: false, connections: [5, 6], image1: require('@/assets/5/1.png'), image2: require('@/assets/5/2.png'), loc: findAlocation(), hover: false },
+    { id: 4, label: 'Appy Mamu', display: false, connections: [5, 6, 17, 18], image1: require('@/assets/5/1.png'), image2: require('@/assets/5/2.png'), loc: findAlocation(), hover: false },
     { id: 5, label: 'Baba', display: false, connections: [4, 3, 7], image1: require('@/assets/6/1.png'), image2: require('@/assets/6/2.png'), loc: findAlocation(), hover: false },
     { id: 6, label: 'Nani', display: false, connections: [4, 3, 7], image1: require('@/assets/7/1.png'), image2: require('@/assets/7/2.png'), loc: findAlocation(), hover: false },
-    { id: 7, label: 'Angai Masi', display: false, connections: [5, 6], image1: require('@/assets/8/1.png'), image2: require('@/assets/8/2.png'), loc: findAlocation(), hover: false }
+    { id: 7, label: 'Angai Masi', display: false, connections: [5, 6, 20, 21], image1: require('@/assets/8/1.png'), image2: require('@/assets/8/2.png'), loc: findAlocation(), hover: false },
+    { id: 8, label: 'Dadu', display: false, connections: [2, 10, 14], image1: require('@/assets/9/1.png'), image2: require('@/assets/9/2.png'), loc: findAlocation(), hover: false },
+    { id: 9, label: 'Dadi', display: false, connections: [2, 10, 14], image1: require('@/assets/10/1.png'), image2: require('@/assets/10/2.png'), loc: findAlocation(), hover: false },
+    { id: 10, label: 'Abhishek Chachu', display: false, connections: [11, 12, 8, 9], image1: require('@/assets/11/1.png'), image2: require('@/assets/11/2.png'), loc: findAlocation(), hover: false },
+    { id: 11, label: 'Ahaan', display: false, connections: [10, 13], image1: require('@/assets/12/1.png'), image2: require('@/assets/12/2.png'), loc: findAlocation(), hover: false },
+    { id: 12, label: 'Adweta', display: false, connections: [10, 13], image1: require('@/assets/13/1.png'), image2: require('@/assets/13/2.png'), loc: findAlocation(), hover: false },
+    { id: 13, label: 'Lekhni Chachi', display: false, connections: [11, 12], image1: require('@/assets/14/1.png'), image2: require('@/assets/14/2.png'), loc: findAlocation(), hover: false },
+    { id: 14, label: 'Ankit Chachu', display: false, connections: [16, 8, 9], image1: require('@/assets/15/1.png'), image2: require('@/assets/15/2.png'), loc: findAlocation(), hover: false },
+    { id: 15, label: 'Meenakshi Chachi', display: false, connections: [16], image1: require('@/assets/16/1.png'), image2: require('@/assets/16/2.png'), loc: findAlocation(), hover: false },
+    { id: 16, label: 'Ananya', display: false, connections: [14, 15], image1: require('@/assets/17/1.png'), image2: require('@/assets/17/2.png'), loc: findAlocation(), hover: false },
+    { id: 17, label: 'Shanaya', display: false, connections: [4, 19], image1: require('@/assets/18/1.png'), image2: require('@/assets/18/2.png'), loc: findAlocation(), hover: false },
+    { id: 18, label: 'Veer', display: false, connections: [4, 19], image1: require('@/assets/19/1.png'), image2: require('@/assets/19/2.png'), loc: findAlocation(), hover: false },
+    { id: 19, label: 'Neha Mami', display: false, connections: [17, 18], image1: require('@/assets/20/1.png'), image2: require('@/assets/20/2.png'), loc: findAlocation(), hover: false },
+    { id: 20, label: 'Kian', display: false, connections: [22, 7], image1: require('@/assets/21/1.png'), image2: require('@/assets/21/2.png'), loc: findAlocation(), hover: false },
+    { id: 21, label: 'Eva', display: false, connections: [22, 7], image1: require('@/assets/22/1.png'), image2: require('@/assets/22/2.png'), loc: findAlocation(), hover: false },
+    { id: 22, label: 'Prasann Mamu', display: false, connections: [20, 21], image1: require('@/assets/23/1.png'), image2: require('@/assets/23/2.png'), loc: findAlocation(), hover: false }
   ])
 const sketch = (s) => {
   s.setup = () => {
     s.createCanvas(window.innerWidth, window.innerHeight)
   }
   s.draw = () => {
-    // const w = width
-    // const h = height
-    // const sqrt = (w * h) / 400
-    // const diff = Math.sqrt(sqrt)
+    const w = width
+    const h = height
+    const sqrt = (w * h) / 400
+    const diff = Math.sqrt(sqrt)
     s.background(200)
     s.strokeWeight(2)
     s.stroke(0)
@@ -158,14 +168,14 @@ const sketch = (s) => {
     s.strokeWeight(2)
     s.circle(s.mouseX, s.mouseY, 50)
     s.circle(width - s.mouseX, height - s.mouseY, 50)
-    // for (let i = 0; i < w; i += diff) {
-    //   for (let y = 0; y < h; y += diff) {
-    //     s.strokeWeight(0.5)
-    //     s.stroke(100, 100, 100, 2)
-    //     s.line(i, 0, i, h)
-    //     s.line(0, y, w, y)
-    //   }
-    // }
+    for (let i = 0; i < w; i += diff) {
+      for (let y = 0; y < h; y += diff) {
+        s.strokeWeight(1)
+        s.stroke(100, 100, 100, 2)
+        s.line(i, 0, i, h)
+        s.line(0, y, w, y)
+      }
+    }
     s.strokeWeight(1)
     s.stroke(0)
     for (let i = 0; i < s.array.length; i++) {
@@ -197,20 +207,22 @@ function update (event) {
   valuey.value = height - event.pageY
 }
 
-// const debug = []
-
-// for (let i = 0; i < locations.length; i++) {
-//   debug.push({ id: i, im: locations[i], la: reverseLocations[i] })
-// }
-// console.log(debug)
 function releaseConnections (id) {
   for (let i = 0; i < ar[id].connections.length; i++) {
     ar[ar[id].connections[i]].display = true
   }
+  let d = true
+  for (let i = 0; i < ar.length; i++) {
+    if (ar[i].display === false) {
+      d = false
+    }
+  }
+  unlock.value = d
 }
 function magnify (val) {
   magnifyValue.value = val
 }
+
 provide('release', releaseConnections)
 provide('ar', ar)
 provide('boxSize', boxSize)
@@ -233,7 +245,26 @@ provide('magnifyFunction', magnify)
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.congratulations{
+  position: absolute;
+  left: 38vw;
+  top: 40vh;
+  width: 25vw;
+  height: 30vh;
+  display: flex;
+  border: 2px solid black;
+  flex-direction: column;
+  background-color: rgb(200, 200, 200);
+  justify-content: center;
+  align-items: center;
+  .close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1.5px solid black;
+    }
+}
 #cursor{
   width: 25px;
   height: 25px;
