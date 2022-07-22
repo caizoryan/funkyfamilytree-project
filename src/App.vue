@@ -21,6 +21,10 @@
   <p>You unlocked the whole family!</p>
   <button class="close" @click="unlock = false" >x</button>
 </div>
+
+<div v-if="small" class="incSize">
+  <h1>Please increase screen size and refresh</h1>
+</div>
 </template>
 
 <script setup>
@@ -38,21 +42,30 @@ const boxes = 1000
 const sqrt = (width * height) / (46 * 3)
 const boxSize = Math.sqrt(sqrt)
 const border = 100
+const small = ref(false)
 const assignedLocations = [{ x: width / 2 - boxSize, y: height / 2 }, { x: width / 2 + boxSize, y: height / 2 }, { x: width / 2, y: height / 2 + boxSize }, { x: width / 2, y: height / 2 - boxSize }]
+
+if (width < 800) {
+  small.value = true
+}
+
 function findAlocation () {
-  let r = 0
-  let ar = []
-  let collide = true
-  while (collide) {
-    ar = checkCollision()
-    collide = ar[0]
-    r = ar[1]
+  let value = { i: { x: 0, y: 0 }, l: { x: 0, y: 0 } }
+  if (small.value === false) {
+    let r = 0
+    let ar = []
+    let collide = true
+    while (collide) {
+      ar = checkCollision()
+      collide = ar[0]
+      r = ar[1]
+    }
+    assignedLocations.push({ x: parseInt(locations[r].x), y: parseInt(locations[r].y) })
+    assignedLocations.push({ x: parseInt(reverseLocations[r].x), y: parseInt(reverseLocations[r].y) })
+    value = { i: locations[r], l: reverseLocations[r] }
+    locations.splice(r, 1)
+    reverseLocations.splice(r, 1)
   }
-  assignedLocations.push({ x: parseInt(locations[r].x), y: parseInt(locations[r].y) })
-  assignedLocations.push({ x: parseInt(reverseLocations[r].x), y: parseInt(reverseLocations[r].y) })
-  const value = { i: locations[r], l: reverseLocations[r] }
-  locations.splice(r, 1)
-  reverseLocations.splice(r, 1)
   return value
 }
 function checkCollision () {
@@ -278,5 +291,18 @@ provide('magnifyFunction', magnify)
     width: 100%;
     height: 100%;
   }
+}
+
+.incSize{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: rgb(200, 200, 200);
 }
 </style>
