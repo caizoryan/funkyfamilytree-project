@@ -19,9 +19,10 @@
 <div  v-if="unlock" class="congratulations">
   <h1>Congratulations!</h1>
   <p>You unlocked the whole family!</p>
+  <p>Total Time: {{ time }}</p>
   <button class="close" @click="unlock = false" >x</button>
 </div>
-
+<div class="time">{{ time }}</div>
 <div v-if="small" class="incSize">
   <h1>Please increase screen size and refresh</h1>
 </div>
@@ -44,7 +45,10 @@ const boxSize = Math.sqrt(sqrt)
 const border = 100
 const small = ref(false)
 const assignedLocations = [{ x: width / 2 - boxSize, y: height / 2 }, { x: width / 2 + boxSize, y: height / 2 }, { x: width / 2, y: height / 2 + boxSize }, { x: width / 2, y: height / 2 - boxSize }]
-
+const time = ref(0)
+const firstclick = ref(true)
+// eslint-disable-next-line
+var interval
 if (width < 800) {
   small.value = true
 }
@@ -221,6 +225,13 @@ function update (event) {
 }
 
 function releaseConnections (id) {
+  if (firstclick.value === true) {
+    firstclick.value = false
+    // eslint-disable-next-line
+    interval = setInterval(function () {
+      time.value++
+    }, 1000)
+  }
   for (let i = 0; i < ar[id].connections.length; i++) {
     ar[ar[id].connections[i]].display = true
   }
@@ -229,6 +240,9 @@ function releaseConnections (id) {
     if (ar[i].display === false) {
       d = false
     }
+  }
+  if (d === true) {
+    clearInterval(interval)
   }
   unlock.value = d
 }
@@ -304,5 +318,12 @@ provide('magnifyFunction', magnify)
   align-items: center;
   display: flex;
   background-color: rgb(200, 200, 200);
+}
+
+.time{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 30px;
 }
 </style>
